@@ -20,6 +20,9 @@ public class PopupBank : MonoBehaviour
     public TMP_InputField remittanceInput;
     public TMP_InputField remittanceTargetInput;
 
+    private string targetName;
+    private int targetBalance;
+
     private void Start()
     {
         Refresh();
@@ -110,9 +113,9 @@ public class PopupBank : MonoBehaviour
         if (remittanceTargetInput == null)
             return;
 
-        string targetName = remittanceTargetInput.text;
+        targetName = remittanceTargetInput.text;
         // string 네임으로 들어왓으면
-        if (targetName != null)
+        if (targetName != "") // 널이 아니다로 하면 빈 문자열이 통과됨
         {
             // 그 송금대상한테로 가게 저장
 
@@ -136,10 +139,14 @@ public class PopupBank : MonoBehaviour
             if (amount > 0 && amount <= myData.balance)
             {
                 myData.balance -= amount;
-                //Target.balance += amount; // 다른유저 돈들어오게
+                targetBalance += amount; // 다른유저 돈들어오게
 
                 Refresh();
                 GameManager.Instance.SaveUserData();
+            }
+            else
+            {
+                Error();
             }
         }
     }
